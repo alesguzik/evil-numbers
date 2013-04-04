@@ -127,7 +127,7 @@ decimal: [0-9]+, e.g. 42 or 23"
      (<= 0 (skip-chars-forward "bBoOxX"))))))
 
 (defun evil-numbers/search-and-replace (look-back skip-back search-forward inc base left-bound right-bound)
-  "When looking back at `LOOK-BACK' skip chars `SKIP-BACK'backwards and replace number incremented by `INC' in `BASE' and return non-nil."
+  "When looking back at `LOOK-BACK' skip chars `SKIP-BACK' backwards and replace number incremented by `INC' in `BASE' and return non-nil."
   (when (looking-back look-back left-bound)
     (skip-chars-backward skip-back)
     (search-forward-regexp search-forward right-bound)
