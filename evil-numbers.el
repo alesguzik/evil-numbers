@@ -78,8 +78,8 @@
            (replace-match
             (format (format "%%0%dd" (- (match-end 1) (match-beginning 1)))
                     (+ amount (string-to-number (match-string 0) 10))))
-		   ;; Moves point one position back to conform with Vim
-		   (forward-char -1)
+           ;; Moves point one position back to conform with Vim
+           (forward-char -1)
            t))
        (error "No number at point or until end of line")))))
 
@@ -110,21 +110,21 @@ decimal: [0-9]+, e.g. 42 or 23"
   (or
    ;; numbers or format specifier in front
    (looking-back (rx (or (+? digit)
-                        (and "0" (or (and (in "bB") (*? (in "01")))
-                                  (and (in "oO") (*? (in "0-7")))
-                                  (and (in "xX") (*? (in digit "A-Fa-f"))))))) left-bound)
+                         (and "0" (or (and (in "bB") (*? (in "01")))
+                                      (and (in "oO") (*? (in "0-7")))
+                                      (and (in "xX") (*? (in digit "A-Fa-f"))))))) left-bound)
    ;; search for number in rest of line
    ;; match 0 of specifier or digit, being in a literal and after specifier is
    ;; handled above
    (and
-	(re-search-forward "[[:digit:]]" right-bound t)
-	(or
-	 (not (memq (char-after) '(?b ?B ?o ?O ?x ?X)))
-	 (/= (char-before) ?0)
-	 (and (> (point) 2)				; Should also take bofp into consideration
-		  (not (looking-back "\\W0" 2)))
-	 ;; skip format specifiers and interpret as bool
-	 (<= 0 (skip-chars-forward "bBoOxX"))))))
+    (re-search-forward "[[:digit:]]" right-bound t)
+    (or
+     (not (memq (char-after) '(?b ?B ?o ?O ?x ?X)))
+     (/= (char-before) ?0)
+     (and (> (point) 2)				; Should also take bofp into consideration
+          (not (looking-back "\\W0" 2)))
+     ;; skip format specifiers and interpret as bool
+     (<= 0 (skip-chars-forward "bBoOxX"))))))
 
 (defun evil-numbers/search-and-replace (look-back skip-back search-forward inc base left-bound right-bound)
   "When looking back at `LOOK-BACK' skip chars `SKIP-BACK'backwards and replace number incremented by `INC' in `BASE' and return non-nil."
@@ -134,8 +134,8 @@ decimal: [0-9]+, e.g. 42 or 23"
     (replace-match (evil-numbers/format (+ inc (string-to-number (match-string 1) base))
                                         (length (match-string 1))
                                         base))
-	;; Moves point one position back to conform with Vim
-	(forward-char -1)
+    ;; Moves point one position back to conform with Vim
+    (forward-char -1)
     t))
 
 (defun evil-numbers/format (num width base)
