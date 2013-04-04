@@ -56,9 +56,9 @@
 (defun evil-numbers/inc-in-range (amount start end)
   "Increment the number at point or after point before end-of-line by `amount'"
   (save-match-data
-    (if (not (evil-numbers/search-number start end))
-        (error "No number at point or until end of line")
-      (or
+    (and
+     (evil-numbers/search-number start end)
+     (or
        ;; find binary literals
        (evil-numbers/search-and-replace "0[bB][01]*" "01" "\\([01]+\\)" amount 2 start end)
 
@@ -78,10 +78,10 @@
            (replace-match
             (format (format "%%0%dd" (- (match-end 1) (match-beginning 1)))
                     (+ amount (string-to-number (match-string 0) 10))))
-           ;; Moves point one position back to conform with Vim
-           (forward-char -1)
-           t))
-       (error "No number at point or until end of line")))))
+           t)))
+     ;; Moves point one position back to conform with Vim
+     (forward-char -1)
+     t)))
 
 ;;;###autoload
 (defun evil-numbers/inc-at-pt (amount)
@@ -134,8 +134,6 @@ decimal: [0-9]+, e.g. 42 or 23"
     (replace-match (evil-numbers/format (+ inc (string-to-number (match-string 1) base))
                                         (length (match-string 1))
                                         base))
-    ;; Moves point one position back to conform with Vim
-    (forward-char -1)
     t))
 
 (defun evil-numbers/format (num width base)
