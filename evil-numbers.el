@@ -53,6 +53,18 @@
 ;;; Code:
 
 ;;;###autoload
+(defun evil-numbers/inc-in-visual-block (amount)
+  "Increment numbers  by `amount' in every row of visual selection"
+  (interactive "p*")
+  (let* ((overlay-lists (overlay-lists))
+         (overlays (concat (car overlay-lists) (cdr overlay-lists))))
+    (if overlays
+        (dolist (o overlays)
+          (let ((start (overlay-start o))
+                (end (overlay-end o)))
+            (evil-numbers/inc-in-range amount start end))))))
+
+;;;###autoload
 (defun evil-numbers/inc-in-range (amount start end)
   "Increment the number at point or after point before end-of-line by `amount'"
   (save-match-data
